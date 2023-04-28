@@ -1,0 +1,2 @@
+Modern x86-compatible processors are capable of addressing up to 2^32 bytes of 
+memory (32-bit addresses).  

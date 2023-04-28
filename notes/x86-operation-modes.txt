@@ -1,0 +1,75 @@
+The x86 processor model has 3 primary operating modes. These are as follows:
+
+1. Protected Mode
+2. Real Address Mode
+3. System Management Mode
+
+The protected mode has a sub-category known as the "Virtual - 8086 mode" 
+(virtual 8086 mode (also called virtual real mode, V86-mode, or VM86). This 
+mode allows the execution of real mode applications that are incapable of 
+directly running in protected mode while the processor is running in that mode.
+It is a hardware virtualization technique that allowed multiple 8086 processors
+to be emulated by the 386 chip. 
+
+===============================================================================
+============================= Protected Mode ==================================
+===============================================================================
+
+    - This is the native state of the processor.
+    - All instruction features are available in this mode. 
+    - Includes the VM86 sub-mode.
+    - Projects are given seperate memory areas called segments. 
+    - Processor prevents program from referencing outside of their assigned
+      segment. 
+
+    - NOTE: The VM86 mode actually enables the processor to directly execute 
+            real-address mode software while in Protected mode.
+
+
+===============================================================================
+================================ Real Mode=====================================
+===============================================================================
+
+    - Implements 8086 programming environment.
+    - Capable of switching into other modes.
+    - This is where the bootloader and initial kernel stuff happens
+
+===============================================================================
+=========================== System Management Mode ============================
+===============================================================================
+
+SMM, sometimes called ring−2 in reference to protection rings. This is where we
+have stuff like device drivers. The mode is primarily used to provide the OS a
+way to manage the system
+
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+So, simply put, according to the x86 architecture, here's a list of stuff that
+runs on the different privilege rings:
+
+    - Ring 0 (most privileged):
+        - Kernel mode
+        - Device drivers
+        - Hypervisors
+
+    - Ring 1:
+        - Not typically used in modern operating systems
+
+    - Ring 2:
+        - Legacy drivers
+        - System management mode (SMM)
+
+    - Ring 3 (least privileged):
+        - User mode applications
+        - User mode drivers
+
+Ring 1 is not typically used in most modern operating systems because it offers 
+little advantage over Ring 2 in terms of performance or security. In fact, 
+using Ring 1 requires additional overhead for context switching, and there is 
+little need for privileged instructions that can only be executed at Ring 1. 
+Additionally, Ring 1 has historically been used by virtual machine hypervisors 
+to run virtual machine guest operating systems, but modern virtualization 
+technologies use hardware-assisted virtualization which allows guest operating
+systems to run directly on Ring 0 without the need for Ring 1.

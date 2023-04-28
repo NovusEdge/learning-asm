@@ -1,0 +1,24 @@
+We can declare "static data regions" (global variables) in x86 assembly using
+special assembler directives. Here're some to use for different sizes:
+
+1. DB (Declare Byte)        (1 byte)
+2. DW (Declare Word)        (2 bytes)
+3. DD (Declare Double word) (4 bytes)
+4. DQ (Declare Quad word)   (8 bytes) (64-bit only)
+
+There's a lot of stuff that can be done by using these instructions, and we can
+also declare full blown arrays and such. Unlike in high level languages 
+where arrays can have many dimensions and are accessed by indices, arrays in 
+x86 assembly language are simply a number of cells located contiguously in 
+memory. An array can be declared by just listing the values, as in the first 
+example below. Two other common methods used for declaring arrays of data are 
+the DUP directive and the use of string literals. The DUP directive tells the 
+assembler to duplicate an expression a given number of times. For example, 
+4 DUP(2) is equivalent to 2, 2, 2, 2.
+
+
+Z       DD 1,2,3     ; Declare three 4-byte values, initialized to 1,2,3. So..
+                     ; The value of location Z+8 will be 3
+
+
+For more check the data-regions.asm file.

@@ -1,0 +1,22 @@
+ Modern (i.e 386 and beyond) x86 processors have eight 32-bit general purpose 
+ registers. Namely:
+    
+                 |<---------32 bit---------->| 
+                 |<--16 bit-->|<---16 bit--->|     
+                                High      Low
+                                 |         | 
+                                 v         v
+     1. EAX  --> |  AX        | AH    +   AL |   <---|
+     2. EBX  --> |  BX        | BH    +   BL |   <---|
+     3. ECX  --> |  CX        | CH    +   CL |   <---|--- General Purpose
+     4. EDX  --> |  DX        | DH    +   DL |   <---|    Registers
+                                                     |
+     5. ESI  <---------------------------------------| 
+     6. EDI  <---------------------------------------| 
+     7. ESP  <--- Stack Pointer
+     8. EDP  <--- Base Pointer
+
+Each is responsible for different stuff. The registers: EAX, EBX, ECX, EDX, ESI
+and EDI all general purpose registers and can be used for anything. 
+
+ESP and EDP are registers reserved for interacting with the program stack. 
