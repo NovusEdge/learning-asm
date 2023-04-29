@@ -1,0 +1,101 @@
+The calling convention is a protocol about how to call and return from 
+routines. 
+
+Calling conventions include information about:
+    - Argument Order
+    - Register Usage
+    - Stack Usage
+    - Caller/Callee Responsibility
+
+Here are some of the commonly used calling conventions:
+
+1. cdecl: Arguments are pushed on the stack from right to left and the caller 
+          is responsible for cleaning up the stack after the function returns.
+
+2. stdcall: Arguments are pushed on the stack from right to left, but the 
+            callee is responsible for cleaning up the stack after the function 
+            returns.
+
+3. fastcall: The first two arguments are passed in registers, and the remaining 
+             arguments are pushed on the stack from right to left.
+
+4. System V AMD64 ABI: Arguments are passed in registers and/or on the stack, 
+                       and the callee is responsible for cleaning up the stack.
+
+5. Microsoft x64 calling convention: The first four integer or pointer 
+                       arguments are passed in registers, and the remaining 
+                       arguments are passed on the stack. The callee is 
+                       responsible for cleaning up the stack.
+
+
+
+The C calling convention is based heavily on the use of the hardware-supported
+stack. It is based on the push, pop, call, and ret instructions. Subroutine 
+parameters are passed on the stack. Registers are saved on the stack, and local
+variables used by subroutines are placed in memory on the stack.
+
+The calling convention is broken into two sets of rules. The first set of rules
+is employed by the caller of the subroutine, and the second set of rules is
+observed by the writer of the subroutine (the callee).
+
+
+Caller Rules:
+To make a subroutine call, the CALLER should:
+    1. Before calling a subroutine, save the contents of the caller-saved registers
+       EAX, ECX, EDX, on the stack if the caller needs their values after the 
+       subroutine, as the subroutine is allowed to modify them.
+
+    2. Push parameters onto the stack in reverse order before calling a 
+       subroutine. First parameter will be stored at the lowest address since 
+       the stack grows down.
+
+    3. To call a subroutine, use the call instruction which places the return 
+       address on top of the stack parameters and jumps to the subroutine code.
+       The subroutine should follow the callee rules.
+
+Callee Rules:
+The definition of the subroutine should adhere to the following rules at the 
+beginning of the subroutine: 
+
+    1. Push the value of EBP onto the stack, and then copy the value of ESP 
+       into EBP using the following instructions:
+                PUSH ebp
+                MOV  ebp, esp
+        
+       To maintain the base pointer EBP, push its value onto the stack and then
+       copy the value of ESP into EBP with "push ebp" and "mov ebp, esp". This
+       provides a reference point for finding parameters and local variables on
+       the stack. The old base pointer value is saved for later restoration, 
+       and the stack pointer is moved into EBP for accessing parameters and
+       local variables.
+
+    2. Allocate space for local variables on the stack by decrementing the
+       stack pointer. The amount of space needed depends on the number and size
+       of local variables required. Local variables are accessed using known 
+       offsets from the base pointer.
+
+    3. To save callee-saved registers, push them onto the stack. Callee-saved
+       registers are EBX, EDI, and ESI.
+
+
+After these things are done, the main body of the subroutine can proceed. 
+When the subroutine returns, it must follow these steps: 
+
+    1. Leave the return value in EAX
+
+    2. Restore the old values of any callee-saved registers (EDI and ESI) that
+       were modified. The register contents are restored by popping them from 
+       the stack. The registers should be popped in the inverse order that they
+       were pushed. 
+
+    3. Deallocate the local variables by moving the value in the base pointer 
+       into the stack pointer (MOV esp, ebp). The base pointer always contains 
+       the value that the stack pointer contained immediately prior to the 
+       allocation of the local variables.
+
+    4. Immediately before returning, restore the caller's base pointer value by
+       popping EBP off the stack.
+
+    5. Finally, return to the caller by executing a ret instruction.
+
+

@@ -124,3 +124,58 @@
 								; signing of the number
 	
 	IDIV	ebx					; EDX = EAX % EBX && EAX /= EBX
+	
+
+	MOV		eax,			1
+	MOV		ebx,			0
+	MOV		byte [var1],	1
+	MOV		byte [var2],	0
+	; Next are some logical instruction like AND, OR, XOR, and NOT. They are 
+	; quite simple and work just as expected. Here's the syntax for each:
+	; and - Bitwise logical AND:
+	; Syntax:
+	;	and <reg>,<reg>
+	;	and <reg>,<mem>
+	;	and <mem>,<reg>
+	;	and <reg>,<con>
+	;	and <mem>,<con>
+	AND		eax,			ebx		; EAX &= EBX
+	AND		eax,			[var1]	; EAX &= [var1]
+	AND		ebx,			2		; EBX &= 2
+	AND		[var1],			7		; [var1] &= 7
+	AND		[var2],			ebx		; [var2] &= EBX
+
+	; or - Bitwise OR:
+	; Syntax is the same as AND, the same applies to XOR
+
+	; not - bitwise logical NOT
+	; Syntax:
+	;	not <reg>
+	;	not <mem>
+	NOT		eax
+	NOT		[var1]
+
+	
+	; neg - Negate
+	; This performs 2's complement nagation of the operand:
+	; Syntax:
+	;	neg	<reg>
+	;	neg <mem>
+	NEG		ebx			; EAX = -EAX
+	NEG		[var2]		; [var2] = -[var2]
+
+	; shl, shr - Left and Right shift (respectively).
+	; Performs left and right shifts on the first operand with the offset being
+	; the second operand. The max offset is 31. Any shift counts greater than 31
+	; are performed modulo 32. The second operand can either be an 8 bit const
+	; or the register CL:
+	; Syntax:
+	;	shl/r <reg>, <const8>
+	;   shl/r <mem>, <const8>
+	;	shl/r <reg>, CL
+	;	shl/r <mem>, CL
+	SHL		ebx,	4		; EBX <<= 4
+	
+	MOV		CL,		5	
+	SHL		eax,	CL		; EAX <<= CL 
+							;		  ^---| ==5
